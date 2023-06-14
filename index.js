@@ -12,6 +12,8 @@ function ask(questionText) {
 let blueText = "\x1b[94m";
 let resetText = "\x1b[0m";
 let yellowText = "\x1b[0;33m"
+let redText = "\x1b[91m";
+let greenText = "\x1b[32m";
 
 //Initialization of the map
 const gameMap = {
@@ -103,19 +105,19 @@ class player {
 
   addToCollection(collectedItem) {
     this.collection.push(collectedItem);
-    console.log(`\nItem: ${collectedItem} was added to your collection`);
+    console.log(`\n${greenText}Item: ${collectedItem} was added to your collection${resetText}`);
   }
 
   removeFromCollection(collectedItem) {
     this.collection = this.collection.filter((item) => item !== collectedItem);
-    console.log(`\nItem: ${collectedItem} was removed from your collection`);
+    console.log(`\n${redText}Item: ${collectedItem} was removed from your collection${resetText}`);
   }
 
   dropFromCollection() {
     console.log(
-      `\nItem: ${
+      `\n${redText}Item: ${
         this.collection[this.collection.length - 1]
-      } was dropped from your collection`
+      } was dropped from your collection${resetText}`
     );
     this.collection.pop();
   }
@@ -143,9 +145,9 @@ async function managePlayerCollection(item, caseNum) {
     }
   } else {
     console.log(
-      `your hands are full you only carry 3 items at a time \n(one item per hand and one item in your bag)`
+      `${redText}your hands are full you only carry 3 items at a time \n(one item per hand and one item in your bag)${resetText}`
     );
-    console.table(newPlayer.collection);
+    //console.table(newPlayer.collection);
     return false;
   }
 }
@@ -159,30 +161,30 @@ function changeRooms(path) { //A function that performs the changes of state for
     }
     return true;
   }
-  console.log(`\nSorry, this path is not available.`);
+  console.log(`\n${redText}Sorry, this path is not available.${resetText}`);
   return false;
 }
 
 function winingOrLoosingDecider(testCase){ //this function checks all the requirement needed to either win or loose the game. 
   if(newPlayer.collection[0]!= "defense kit"){// if user drops their defense kit they loose
-    console.log(`\nYou can't survive without a defense kit. GAME LOST!`)
+    console.log(`\n${redText}You can't survive without a defense kit. GAME LOST!${resetText}`)
     return true
   }
   //
   if(newPlayer.collection[1] != "lighter" && testCase > 2){// you loose if you loose your lighter too and keep on changing rooms
-    console.log(`\nYou can't survive with no lighter it's too dark to see. GAME LOST!`)
+    console.log(`\n${redText}You can't survive with no lighter it's too dark to see. GAME LOST!${resetText}`)
     return true
   }
   if(gameMap.bunker.actionTaken){//if you the code and you have it you win the game
-    console.log(`\nYOU HAVE REACHED SAFETY!!! GAME WON!`)
+    console.log(`\n${greenText}CONGRATULATION ${newPlayer.name.toUpperCase()} YOU HAVE REACHED SAFETY!!! GAME WON!${resetText}`)
     return true
   }
   if(gameMap.den.visited && !gameMap.garage.actionTaken){//if you visit the den before picking up the boards you get eaten
-    console.log(`\nYou can't visit this room without wooden boards to patch the windows . GAME LOST!`)
+    console.log(`\n${redText}You can't visit this room without wooden boards to patch the windows . GAME LOST!${resetText}`)
     return true
   }
   if(!gameMap.kitchen.actionTaken && gameMap.garage.actionTaken){//if you pick the boards in the garage before eating a snack you loose by exhaustion 
-    console.log(`\nYou can't carry wooden boards without eating you are too weak. GAME LOST!`)
+    console.log(`\n${redText}You can't carry wooden boards without eating you are too weak. GAME LOST!${resetText}`)
     return true
   }
   return false
